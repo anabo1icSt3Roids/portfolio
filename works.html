@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>All Works — Manas Basu</title>
+  <meta name="description" content="Explore the complete portfolio of Manas Basu — video editor specializing in short-form content and high-converting UGC ads.">
+
+  <link rel="icon" href="/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Oswald&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <meta name="theme-color" content="#0a0a0a">
+
+  <style>
+    /*RESET*/
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray: #888888;
+      --gray-dark: #444444;
+      --gray-light: #e8e8e8;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /*CURSOR*/
+    .cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+    }
+
+    .cursor.hover-state { width: 6px; height: 6px; }
+    .cursor-ring.hover-state { width: 52px; height: 52px; }
+    .cursor.dark-bg { background: var(--white); }
+    .cursor-ring.dark-bg { border-color: var(--white); }
+
+    /*NAVBAR*/
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      z-index: 100;
+      background: var(--black);
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    nav.scrolled .nav-logo,
+    nav.scrolled .nav-links a,
+    nav.scrolled .hamburger span {
+      color: var(--black);
+    }
+
+    .nav-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.07em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      position: relative;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+      cursor: none;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--white);
+      transition: width 0.35s ease;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { width: 100%; }
+
+    nav.scrolled .nav-links a::after {
+      background: var(--black);
+    }
+
+    /*Hamburger*/
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /*Mobile Nav*/
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background: var(--white);
+      border-top: 1px solid var(--gray-light);
+      padding: 32px 48px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 24px;
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: all 0.35s ease;
+      pointer-events: none;
+    }
+
+    .mobile-nav.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .mobile-nav a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    /*WORKS HEADER*/
+    #works-header {
+      width: 100%;
+      min-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 48px 80px;
+      background: var(--white);
+      margin-top: 60px;
+    }
+
+    .works-header-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 10vw, 140px);
+      line-height: 0.92;
+      color: var(--black);
+      letter-spacing: 0.02em;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .works-header-subtitle {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 400;
+      color: var(--gray);
+      max-width: 600px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+
+    /*WORKS GRID*/
+    #all-works {
+      background: var(--black);
+      padding: 120px 80px;
+    }
+
+    .works-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .category-section {
+      margin-bottom: 96px;
+    }
+    .category-section:last-of-type {
+      margin-bottom: 0;
+    }
+    .category-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+      border-bottom: 1.5px solid #1c1c1c;
+      padding-bottom: 12px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .work-card {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      cursor: none;
+      background: #111;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .work-card.visible { opacity: 1; transform: translateY(0); }
+
+    .work-card:nth-child(1) { transition-delay: 0s; }
+    .work-card:nth-child(2) { transition-delay: 0.1s; }
+    .work-card:nth-child(3) { transition-delay: 0.15s; }
+    .work-card:nth-child(4) { transition-delay: 0.2s; }
+    .work-card:nth-child(5) { transition-delay: 0.25s; }
+    .work-card:nth-child(6) { transition-delay: 0.3s; }
+    .work-card:nth-child(7) { transition-delay: 0.15s; }
+    .work-card:nth-child(8) { transition-delay: 0.2s; }
+    .work-card:nth-child(9) { transition-delay: 0.25s; }
+
+    .work-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(0.75);
+      transition: filter 0.5s ease, transform 0.6s ease;
+    }
+
+    .work-card:hover .work-thumb {
+      filter: grayscale(0%) brightness(1);
+      transform: scale(1.05);
+    }
+
+    .work-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .work-card:hover .work-card-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .work-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .work-card-tag {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /*YOUTUBE CTA*/
+    #youtube-cta {
+      background: var(--white);
+      color: var(--black);
+      padding: 120px 48px;
+      text-align: center;
+      border-top: 1px solid var(--gray-light);
+    }
+    .youtube-cta-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .youtube-cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 5vw, 64px);
+      letter-spacing: 0.03em;
+      margin-bottom: 16px;
+    }
+    .youtube-cta-desc {
+      font-size: 15px;
+      color: var(--gray-dark);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .youtube-cta-btn {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--white);
+      background: var(--black);
+      padding: 18px 36px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+      cursor: none;
+    }
+    .youtube-cta-btn:hover {
+      background: #222;
+      transform: translateY(-2px);
+    }
+
+
+
+    /*KEYFRAME ANIMATION*/
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /*NOISE OVERLAY*/
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /*RESPONSIVE*/
+    @media (max-width: 1200px) {
+      .works-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .cursor, .cursor-ring { display: none !important; }
+      body { cursor: auto !important; }
+      .hamburger, .work-card { cursor: pointer !important; }
+
+      nav { padding: 0 28px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .mobile-nav { display: flex; }
+
+      #works-header { padding: 80px 28px 60px; }
+      #all-works { padding: 80px 24px; }
+      .works-container { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      #works-header { padding: 60px 20px 48px; }
+      .works-container { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Noise texture overlay -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!--Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!--NAVBAR-->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Manas Basu</a>
+    <ul class="nav-links">
+      <li><a href="index.html">HOME</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">HOME</a>
+  </div>
+
+  <!--WORKS HEADER-->
+  <section id="works-header">
+    <h1 class="works-header-title">All Works</h1>
+    <p class="works-header-subtitle">A selection of projects crafted with precision and creative vision</p>
+  </section>
+
+  <!--ALL WORKS GRID-->
+  <section id="all-works">
+    <!-- Short Form-->
+    <div class="category-section">
+      <h3 class="category-title">Short Form</h3>
+      <div class="works-container">
+
+        <!--1-->
+        <div class="work-card" data-title="YouTube Series" data-tag="Content">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="YouTube Series" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">YouTube Series</p>
+            <p class="work-card-tag">Content</p>
+          </div>
+        </div>
+        <!--2-->
+        <div class="work-card" data-title="Social Content" data-tag="Digital">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1517694712202-14819c9cb6e1?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Social Content" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Social Content</p>
+            <p class="work-card-tag">Digital</p>
+          </div>
+        </div>
+        <!--3-->
+        <div class="work-card" data-title="Tutorial Series" data-tag="Educational">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Tutorial Series" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Tutorial Series</p>
+            <p class="work-card-tag">Educational</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Long Form-->
+    <div class="category-section">
+      <h3 class="category-title">Long Form</h3>
+      <div class="works-container">
+        <!--1-->
+        <div class="work-card" data-title="Short Film" data-tag="Narrative">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Short Film" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Short Film</p>
+            <p class="work-card-tag">Narrative</p>
+          </div>
+        </div>
+        <!--2-->
+        <div class="work-card" data-title="Documentary Cut" data-tag="Editorial">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Documentary Cut" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Documentary Cut</p>
+            <p class="work-card-tag">Editorial</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Commercial-->
+    <div class="category-section">
+      <h3 class="category-title">Commercial</h3>
+      <div class="works-container">
+        <!--1-->
+        <div class="work-card" data-title="Brand Reel" data-tag="Commercial">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Brand Reel" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Brand Reel</p>
+            <p class="work-card-tag">Commercial</p>
+          </div>
+        </div>
+        <!--2-->
+        <div class="work-card" data-title="Product Demo" data-tag="Commercial">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1542130504-b9b67a17dea8?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Product Demo" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Product Demo</p>
+            <p class="work-card-tag">Commercial</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Motion Graphics-->
+    <div class="category-section">
+      <h3 class="category-title">Motion Graphics</h3>
+      <div class="works-container">
+        <!--1-->
+        <div class="work-card" data-title="Music Video" data-tag="Motion">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Music Video" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Music Video</p>
+            <p class="work-card-tag">Motion</p>
+          </div>
+        </div>
+        <!--2-->
+        <div class="work-card" data-title="Event Coverage" data-tag="Documentation">
+          <img class="work-thumb"
+            src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=600&auto=format&fit=crop&q=80&grayscale"
+            alt="Event Coverage" />
+          <div class="work-card-overlay">
+            <p class="work-card-title">Event Coverage</p>
+            <p class="work-card-tag">Documentation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--YOUTUBE CTA-->
+  <section id="youtube-cta">
+    <div class="youtube-cta-container">
+      <h2 class="youtube-cta-title">Want to see more?</h2>
+      <p class="youtube-cta-desc">My YouTube channel contains additional edits, experiments and recent work.</p>
+      <a href="https://youtube.com/@thor.f1nnn/" target="_blank" class="youtube-cta-btn">Visit YouTube →</a>
+    </div>
+  </section>
+
+  <!--Footer-->
+  <footer>
+    <p class="footer-copy">© 2026 Manas Basu</p>
+  </footer>
+
+  <!--Js-->
+  <script>
+    //cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    //Cursor Hover Detection
+    const hoverEls = document.querySelectorAll('a, button, .work-card');
+    hoverEls.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('hover-state');
+        ring.classList.add('hover-state');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('hover-state');
+        ring.classList.remove('hover-state');
+      });
+    });
+
+    // Dark BG Cursor
+    const darkSections = document.querySelectorAll('#all-works, footer');
+    const updateCursorColor = () => {
+      let isDark = false;
+      darkSections.forEach(sec => {
+        const r = sec.getBoundingClientRect();
+        if (my > r.top && my < r.bottom) isDark = true;
+      });
+      cursor.classList.toggle('dark-bg', isDark);
+      ring.classList.toggle('dark-bg', isDark);
+    };
+    document.addEventListener('mousemove', updateCursorColor);
+
+    // Navbar Scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile hamburger
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+      });
+    });
+
+    // Scroll Reveal
+    const revealEls = document.querySelectorAll('.work-card');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
