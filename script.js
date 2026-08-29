@@ -115,7 +115,7 @@ function updateCursorColor() {
       const videoMap = {
         "Work Sample 1": "https://www.youtube.com/embed/DoYc6q7CLHs?autoplay=1",
         "Work Sample 2": "https://www.youtube.com/embed/k6RcznON2VM",
-        "Work Sample 3": "",
+        "Work Sample 3": "https://www.youtube.com/embed/b3izSFJzn8w?autoplay=1",
         "Brand Reel": "https://www.youtube.com/embed/DoYc6q7CLHs?autoplay=1",
         "Short Film": "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
         "YouTube Series":
